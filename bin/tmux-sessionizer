@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+# either receive passed argument or select folder via fzf
+if [[ $# -eq 1 ]]; then
+    selected_dir=$1
+else
+    selectable_dirs=($(find ~/ ~/Code ~/.config -mindepth 1 -maxdepth 1 -type d))
+    selectable_dirs+=($(find ~/ -mindepth 0 -maxdepth 0 -type d)) # add home dir to list
+    selected_dir=$(printf "%s\n" "${selectable_dirs[@]}" | fzf)
+fi
+
+if [[ -z $selected_dir ]]; then
+    exit 0
+fi
+
+session_name=$(basename "$selected_dir" | tr . _) 
+is_tmux_running=$(pgrep tmux)
+
+if [[ -z $TMUX ]] && [[ -z $is_tmux_running ]]; then
+    tmux new-session -s $session_name -c $selected_dir
+    exit 0
+fi
+
+if ! tmux has-session -t=$session_name 2> /dev/null; then
+    tmux new-session -ds $session_name -c $selected_dir
+fi
+
+tmux switch-client -t $session_name
