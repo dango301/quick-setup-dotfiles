@@ -1,4 +1,71 @@
-#!/usr/bin/bash
+#!/bin/bash
 
-dir="$(pwd)"
-echo $dir
+# source globals first so all subsequently sourced files can use them
+source globals.bash
+setup_globals
+source utilities.bash
+
+
+check_git_dir() {
+    # Check if the script directory is inside a Git working tree
+    is_inside_work_tree=$(git -C "$SCRIPT_DIR" rev-parse --is-inside-work-tree &> /dev/null && echo true || echo false)
+
+    # Check if the script directory has a remote named REPO_NAME
+    has_remote_quick_setup=$(git -C "$SCRIPT_DIR" remote -v | grep -q $REPO_NAME && echo true || echo false)
+
+    if [ "$is_inside_work_tree" != true ] || [ "$has_remote_quick_setup" != true ]; then
+        echo "Script directory is not part of the '$REPO_NAME' Git repository. Exiting..."
+        exit 1
+    fi
+}
+
+select_installations() {
+    local selected_options=()
+
+    while true; do
+        select_options "Select configurations to install:"
+
+        if [ $? -eq 0 ]; then # Check exit code of selection prompt (prev command)
+            selected_options=($(read_selection))
+            confirm_selection "Confirm your selection:" "${selected_options[@]}"
+            local confirmed=$?
+        else
+            local confirmed=1
+        fi
+
+        if [ $confirmed -eq 0 ]; then
+            update_selection "${selected_options[@]}"
+            echo "Selection confirmed. Proceeding..."
+            break
+        else
+            echo "Selection not confirmed. Please try again."
+        fi
+    done
+}
+
+run_installations() {
+    cd "$SCRIPT_DIR/.."
+
+    # call each configuration's setup-function
+    for i in "${selected_indeces[@]}"; do
+        local func="setup-${functions[$((i))]}"
+        echo -e "\n\n----------------------------------------"
+        echo -e "[$((i + 1))] Setting up ${functions[$((i))]}:"
+        echo -e "----------------------------------------\n"
+        source "installers/$func.bash" # source file containing function
+        "$func" # call the function called setup-<rest_of_name>
+        echo -e "\n----------------------------------------"
+        echo -e "[$((i + 1))] Successfully configured ${functions[$((i))]}."
+        echo -e "----------------------------------------\n"
+    done
+}
+
+
+main() {
+    check_git_dir
+    select_installations
+    run_installations
+}
+
+
+main # start the main part of the script
