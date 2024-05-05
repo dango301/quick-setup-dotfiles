@@ -3,8 +3,9 @@
 
 # Automatically attach to tmux session on shell open
 # WARNING: this has to come before the p10k stanza below! See https://github.com/romkatv/powerlevel10k/issues/1203
-if [ -z "$TMUX" ]; then # Check if TMUX variable isn't set
-    tmux attach || tmux new-session -s "main"
+if [ -z "$TMUX" ] && command -v tmux-sessionizer &>/dev/null && command -v tmux; then
+    # automatically attach or create session if custom script & tmux are installed
+    tmux-sessionizer "$HOME"
 fi
 
 
@@ -58,59 +59,6 @@ setopt EXTENDED_HISTORY # puts timestamps in the history; from https://stackover
 set -o emacs # as opposed to `bindkey -v` for vim mode
 
 
-# Aliases
-
-# General / Personal use:
-alias c="clear"
-alias mkdir='mkdir -p' # Create parent directories needed for last directory in path
-alias du-here="du -h --max-depth=1 ./ | sort -rh"
-# alias ls="lsd" # using lsd package with colors, icons, tree-view, etc.
-# alias ll='lsd -al'        # Detailed directory listing
-# alias la='lsd -A'          # List all, but exclude . and ..
-alias ll='ls -alF' # Detailed directory listing
-alias la='ls -A'   # List all, but exclude . and ..
-alias n="nvim"
-
-alias cd2="cd .."
-alias cd3="cd ../.."
-alias cd4="cd ../../.."
-alias cd5="cd ../../../.."
-alias cd6="cd ../../../../.."
-
-# Confirm before overwriting files
-alias cp='cp -i'
-alias mv='mv -i'
-
-# Set colored outputs for commands:
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-
-# Use zoxide as if it were a jump command and fzf (via zi command) as if it were a search command
-alias j='z'
-alias f='zi'
-
-# for .dotfiles bare git repo that tracks all config files etc.
-# alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=/'
-# alias config="dotfiles"
-
-# Git
-alias gs="git status"
-alias ga="git add"
-alias gc="git commit"
-alias gb="git branch"
-alias pear="ssh pear@141.83.158.205" # for Robotics Project's NVIDIA Jetson Orin NX on car, potentially REMOVE in the future
-alias pear2="ssh pear@141.83.158.160" # for Robotics Project's NVIDIA Jetson Orin NX on car, potentially REMOVE in the future
-alias vpn="sudo nmcli --ask con up id Uni-Luebeck-VPN-sslgate" # connect to Uni-Luebeck VPN
-alias vpn-close="nmcli con down Uni-Luebeck-VPN-sslgate"
-
-# Tmux
-alias ta="tmux a" # attach to previous tmux session
-alias tn="tmux new" # create new named tmux session
-alias tl="tmux ls" # list all tmux sessions
-alias tk="tmux kill-server" # kill tmux server
-
-
 # Keybindings: general / functional / navigation
 # perhaps check out https://stackoverflow.com/a/30899296/11360260 for sth really advanced
 
@@ -139,10 +87,10 @@ bindkey '^[[3~' delete-char
 # Keybindings: useful / personal
 
 # Open LF Terminal File Manager with Ctrl+o
-# bindkey -s '^o' 'lf\n'
+bindkey -s '^o' 'lf\n'
 
-# Run custom tmux-sessionizer script on Alt+f that opens a folder in a new tmux session
-bindkey -s '^[f' 'tmux-sessionizer\n'
+# Run my tmux-sessionizer script on Ctrl+f that opens a folder in a new tmux session
+bindkey -s '^f' 'tmux-sessionizer\n'
 
 # Open nvim in current dir
 bindkey -s '^n' 'nvim .\n'
@@ -182,4 +130,3 @@ source ~/.config/zsh/zsh-history-substring-search/zsh-history-substring-search.z
 # Rebind up and down arrow keys for history-substring-search plugin
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
-

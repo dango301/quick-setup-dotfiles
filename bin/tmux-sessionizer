@@ -6,6 +6,7 @@ if [[ $# -eq 1 ]]; then
 else
     selectable_dirs=($(find ~/ ~/Code ~/.config -mindepth 1 -maxdepth 1 -type d))
     selectable_dirs+=($(find ~/ -mindepth 0 -maxdepth 0 -type d)) # add home dir to list
+    selectable_dirs+=($(find ~/Code/uni-code/ -mindepth 1 -maxdepth 1 -type d)) # add uni code projects dir to list
     selected_dir=$(printf "%s\n" "${selectable_dirs[@]}" | fzf)
 fi
 
@@ -13,16 +14,29 @@ if [[ -z $selected_dir ]]; then
     exit 0
 fi
 
+
+# Set variables
 session_name=$(basename "$selected_dir" | tr . _) 
-is_tmux_running=$(pgrep tmux)
+[[ -z $TMUX ]] && within_tmux=false || within_tmux=true
+session_exists=$(tmux has-session -t=$session_name 2>/dev/null && echo "true" || echo "false")
+# echo "$within_tmux, $session_exists"
 
-if [[ -z $TMUX ]] && [[ -z $is_tmux_running ]]; then
-    tmux new-session -s $session_name -c $selected_dir
-    exit 0
+
+if ! $within_tmux && ! $session_exists; then
+    # echo "00"
+    tmux new -s $session_name -c $selected_dir
+
+elif ! $within_tmux && $session_exists; then
+    # echo "01"
+    tmux attach -t $session_name
+
+elif $within_tmux && ! $session_exists; then
+    # echo "10"
+    tmux new -ds $session_name -c $selected_dir
+    tmux switch-client -t $session_name
+
+else
+    # echo "11"
+    tmux switch-client -t $session_name
 fi
 
-if ! tmux has-session -t=$session_name 2> /dev/null; then
-    tmux new-session -ds $session_name -c $selected_dir
-fi
-
-tmux switch-client -t $session_name

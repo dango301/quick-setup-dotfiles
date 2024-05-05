@@ -1,18 +1,11 @@
-#!/bin/zsh
 
-# History settings (no history file is created by default)
-SAVEHIST=10000  # Save most-recent 10000 lines
-HISTSIZE=12000  # Keep most-recent lines in memory; should be at least 20% bigger than $SAVEHIST
-HISTFILE="$HOME/.zsh_history"
-
+# Exports
 
 # XDG Paths
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 
-
-# Exports
 export EDITOR="nvim"
 export SUDO_EDITOR="nvim"
 export PATH="$PATH:$HOME/bin"

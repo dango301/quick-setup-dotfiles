@@ -1,0 +1,49 @@
+# Aliases
+
+# General / Personal use:
+alias c="clear"
+alias mkdir='mkdir -p' # Create parent directories needed for last directory in path
+alias du-here="du -h --max-depth=1 ./ | sort -rh"
+alias ls="ls" # using lsd package with colors, icons, tree-view, etc.
+alias ll='ls -al'        # Detailed directory listing
+alias la='ls -A'          # List all, but exclude . and ..
+alias n="nvim"
+
+alias cd2="cd .."
+alias cd3="cd ../.."
+alias cd4="cd ../../.."
+alias cd5="cd ../../../.."
+alias cd6="cd ../../../../.."
+
+# Confirm before overwriting files
+alias cp='cp -i'
+alias mv='mv -i'
+
+# Set colored outputs for commands:
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+# Use zoxide as if it were a jump command and fzf (via zi command) as if it were a search command
+alias j='z'
+alias f='zi'
+
+# Git
+alias gf="git fetch origin"
+alias gs="git status"
+alias gl="git log"
+alias ga="git add"
+alias gc="git commit"
+alias gb="git branch"
+alias gpo="git push origin"
+alias pear="ssh pear@141.83.158.163" # for Robotics Project's NVIDIA Jetson Orin NX on car, potentially REMOVE in the future
+alias pear2="ssh pear@141.83.158.160" # for Robotics Project's NVIDIA Jetson Orin NX on car, potentially REMOVE in the future
+alias vpn="sudo nmcli --ask con up id Uni-Luebeck-VPN-sslgate" # connect to Uni-Luebeck VPN
+alias vpn-close="nmcli con down Uni-Luebeck-VPN-sslgate"
+
+# Tmux
+alias ta="tmux a" # attach to previous tmux session
+alias tn="tmux new" # create new named tmux session
+alias tl="tmux ls" # list all tmux sessions
+alias tk="tmux kill-server" # kill tmux server
+
