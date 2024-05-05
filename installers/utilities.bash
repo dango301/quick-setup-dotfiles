@@ -6,10 +6,10 @@ temp_selection=()
 select_options() {
     local title="$1"
 
-    # Display options for manual selection
+    # Display OPTIONS for manual selection
     echo -e "\n$title\n"
-    for ((i=0; i<${#options[@]}; i+=2)); do
-        echo -e "\t[$((i/2 + 1))] ${options[$i]}"
+    for ((i=0; i<${#OPTIONS[@]}; i+=2)); do
+        echo -e "\t[$((i/2 + 1))] ${OPTIONS[$i]}"
     done
     echo ""
     read -rp "Enter numbers to make a selection (comma-separated): " input
@@ -20,8 +20,8 @@ select_options() {
     IFS=',' read -ra selections <<< "$input"
 
     for selection in "${selections[@]}"; do
-        if [[ "$selection" =~ ^[0-9]+$ ]] && ((selection > 0 && selection <= ${#options[@]}/2)); then
-            selected_options+=("${options[((2 * selection - 1))]}")  # Adjusted index to select values
+        if [[ "$selection" =~ ^[0-9]+$ ]] && ((selection > 0 && selection <= ${#OPTIONS[@]}/2)); then
+            selected_options+=("${OPTIONS[((2 * selection - 1))]}")  # Adjusted index to select values
         else
             valid_selection=false
             break
@@ -51,7 +51,7 @@ confirm_selection() {
 
     confirmation_elements=()
     for i in "${selected_options[@]}"; do
-        confirmation_elements+=("\t[$((i+1))] ${functions[$((i))]}")
+        confirmation_elements+=("\t[$((i+1))] ${FUNCTIONS[$((i))]}")
     done
 
     # Ask user to confirm selection
@@ -73,7 +73,7 @@ confirm_selection() {
             ;;
         *)
             echo "Invalid choice. Please enter 'yes' or 'no'."
-            confirm_selection "$title" "${options[@]}"  # Recursive call
+            confirm_selection "$title" "${OPTIONS[@]}"  # Recursive call
             ;;
     esac
 }

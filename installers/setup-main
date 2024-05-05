@@ -47,16 +47,16 @@ run_installations() {
     cd "$SCRIPT_DIR/.."
 
     # call each configuration's setup-function
-    for i in "${selected_indeces[@]}"; do
-        local func="setup-${functions[$((i))]}"
-        echo -e "\n\n----------------------------------------"
-        echo -e "[$((i + 1))] Setting up ${functions[$((i))]}:"
-        echo -e "----------------------------------------\n"
+    for i in "${SELECTED_INDECES[@]}"; do
+        local func="setup-${FUNCTIONS[$((i))]}"
+        echo -e "\n\n----------------------------------------------------"
+        echo -e "[$((i + 1))] Setting up ${FUNCTIONS[$((i))]}:"
+        echo -e "----------------------------------------------------\n"
         source "installers/$func.bash" # source file containing function
         "$func" # call the function called setup-<rest_of_name>
-        echo -e "\n----------------------------------------"
-        echo -e "[$((i + 1))] Successfully configured ${functions[$((i))]}."
-        echo -e "----------------------------------------\n"
+        echo -e "\n----------------------------------------------------"
+        echo -e "[$((i + 1))] Successfully configured ${FUNCTIONS[$((i))]}."
+        echo -e "----------------------------------------------------\n"
     done
 }
 

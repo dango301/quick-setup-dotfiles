@@ -7,7 +7,7 @@ TMP_FILE="/tmp/selection-$REPO_NAME"
 # Get the directory path of the script
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-functions=(
+FUNCTIONS=(
     "bash"
     "zsh"
     "tmux"
@@ -19,7 +19,7 @@ functions=(
     "alacritty"
     "custom-scripts"
 )
-descriptions=(
+DESCRIPTIONS=(
    ".bashrc, .bash_profile"
    "installation, set as default shell, .zshrc, .zprofile, plugins, p10k prompt"
    "installation, tmux.conf, plugins"
@@ -37,18 +37,18 @@ descriptions=(
 setup_globals() {
 
     # Mutable globals
-    options=()
-    statuses=()
-    selected_indeces=()
+    OPTIONS=()
+    STATUSES=()
+    SELECTED_INDECES=()
 
-    # Fill the options associative array with key-value pairs
-    for ((i=0; i<${#descriptions[@]}; i++)); do
-        options+=("${functions[$i]}: ${descriptions[$i]}") # key
-        options+=("$i") # index as value
+    # Fill array with key-value pairs
+    for ((i=0; i<${#DESCRIPTIONS[@]}; i++)); do
+        OPTIONS+=("${FUNCTIONS[$i]}: ${DESCRIPTIONS[$i]}") # key
+        OPTIONS+=("$i") # index as value
     done
 
-    for function in "${functions[@]}"; do
-        statuses+=("unwanted")
+    for function in "${FUNCTIONS[@]}"; do
+        STATUSES+=("unwanted")
     done
 }
 
@@ -56,16 +56,16 @@ update_selection() {
     local selected_options=("$@")
     
     for i in "${selected_options[@]}"; do
-        statuses[$((i))]="waiting"
-        selected_indeces+=("$((i))")
+        STATUSES[$((i))]="waiting"
+        SELECTED_INDECES+=("$((i))")
     done
 }
 
 find_function_index() {
     local target="$1"
     
-    for index in "${!functions[@]}"; do
-        if [[ "${functions[$index]}" == "$target" ]]; then
+    for index in "${!FUNCTIONS[@]}"; do
+        if [[ "${FUNCTIONS[$index]}" == "$target" ]]; then
             echo "$index"
             return 0
         fi
@@ -78,7 +78,7 @@ find_function_index() {
 update_status() {
     local index="$1"
     local status="$2"
-    statuses[$((index))]="$status"
+    STATUSES[$((index))]="$status"
 }
 
 
