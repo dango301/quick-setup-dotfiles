@@ -1,3 +1,21 @@
+# TODOs
+
+- [ ] reorganize `utilities.bash`:
+    - rename to `install-selection.bash` and add the last selection function from main to there
+    - create real utilities script for things like logging functions
+- [ ] steal logging functions from https://github.com/holman/dotfiles/blob/0e4a15fb1fd789495b74266c4735a6e5eea07415/script/bootstrap
+- [ ] write health checks (i.e. test scripts); use `test` command (see man pages)
+- [ ] automate creating symlinks and backing up folders if they are already filled
+    - use `ln -sv` for symbolic and verbose
+    - create functions for this and mv existing folders
+    - create backup folder using user's name in `globals.bash` and datetime (for multiple backups in the same minute on failure)
+    - simply pass arrays with file paths (from/to) to functions
+    - before that, use array for paths to create; if already existing (with files in it!), back up entire folder
+    - one function to receive arrays and another to symlink and backup each single file
+    - see https://github.com/holman/dotfiles/blob/0e4a15fb1fd789495b74266c4735a6e5eea07415/script/bootstrap
+    - for big brain version, see https://github.com/hervenivon/dotfiles/blob/main/bootstrap.sh
+- [ ] add options to either overwrite or backup files in the future; see https://github.com/holman/dotfiles/blob/0e4a15fb1fd789495b74266c4735a6e5eea07415/script/bootstrap
+- [ ] 
 
 # What to find in this directory
 
