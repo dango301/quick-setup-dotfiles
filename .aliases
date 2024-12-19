@@ -2,8 +2,9 @@
 
 # General / Personal use:
 alias c="clear"
+alias c="cd && clear"
 alias mkdir='mkdir -p' # Create parent directories needed for last directory in path
-alias du-here="du -h --max-depth=1 ./ | sort -rh"
+alias du-here="sudo du -h --max-depth=1 ./ | sort -rh"
 alias ls="ls" # using lsd package with colors, icons, tree-view, etc.
 alias ll='ls -al'        # Detailed directory listing
 alias la='ls -A'          # List all, but exclude . and ..

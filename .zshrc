@@ -3,10 +3,10 @@
 
 # Automatically attach to tmux session on shell open
 # WARNING: this has to come before the p10k stanza below! See https://github.com/romkatv/powerlevel10k/issues/1203
-if [ -z "$TMUX" ] && command -v tmux-sessionizer &>/dev/null && command -v tmux; then
-    # automatically attach or create session if custom script & tmux are installed
-    tmux-sessionizer "$HOME"
-fi
+# if [ -z "$TMUX" ] && command -v tmux-sessionizer &>/dev/null && command -v tmux; then
+#     # automatically attach or create session if custom script & tmux are installed
+#     ta || tmux-sessionizer "$HOME"
+# fi
 
 
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
